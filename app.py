@@ -10,8 +10,10 @@ from flask import request
 from flask import make_response
 from flask import flash
 from flask import redirect
+from flask import send_from_directory
 from werkzeug import secure_filename    # secure_filemane()
 import imghdr                           # what()
+import os                               # join()
 
 
 app = Flask(__name__)
@@ -38,7 +40,9 @@ def main():
             if check_filetype(request.files['file'], request.files['file'].filename):
                 
                 filename = secure_filename(request.files['file'].filename)
-                request.files['file'].save(app.config['UPLOAD_DIR'] + filename)
+
+                # Save the file in app.config['UPLOAD_DIR']
+                request.files['file'].save(os.path.join(app.config['UPLOAD_DIR'], filename))
                 return "OK"
                 # TODO: flash()
                 # #return redirect(request.url)
@@ -54,6 +58,11 @@ def main():
             # TODO: flash()
             #return redirect(request.url)
 
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_DIR'],
+                               filename)
 
 # Return true if the extension of filename is allowed
 # and the type is truly an image, and not a random file 
