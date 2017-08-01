@@ -1,0 +1,13 @@
+image: docker:latest
+
+services:
+- docker:dind
+
+before_script:
+- docker info
+
+build:
+  script:
+    - docker build -t app:latest app/
+    - docker ps | awk '{print $NF}' | grep -w app && docker rm -f app || echo "No app container, moving on..."
+    - docker run -d --name app -p 5000:5000 app
