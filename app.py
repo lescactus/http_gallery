@@ -10,6 +10,7 @@ from flask import request
 from flask import make_response
 from flask import flash
 from werkzeug import secure_filename    # secure_filemane()
+import imghdr                           # what()
 
 
 app = Flask(__name__)
@@ -29,7 +30,7 @@ def main():
         if request.files['file']:
 
             # If the extension of the file is allowed
-            if check_filetype(request.files['file'].filename):
+            if check_filetype(request.files['file'], request.files['file'].filename):
                 
                 filename = secure_filename(request.files['file'].filename)
                 request.files['file'].save('./uploads/' + filename)
@@ -42,8 +43,10 @@ def main():
 
 
 # Return true if the extension of filename is allowed
-def check_filetype(filename):
-    return filename.rsplit('.')[-1] in app.allowed_extensions
+# and the type is truly an image, and not a random file 
+# with an image extension
+def check_filetype(file, filename):
+    return  filename.rsplit('.')[-1].lower() in app.allowed_extensions and  imghdr.what(file)
 
 
 
