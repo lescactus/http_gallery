@@ -21,7 +21,7 @@ app = Flask(__name__)
 # App config
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024                         # 16Mb max per upload
 app.config['ALLOWED_EXTENSIONS'] = ('bmp', 'gif', 'png', 'jpg', 'jpeg')     # Allowed file extensions to be uploaded
-app.config['UPLOAD_DIR'] = './uploads/'                                     # Upload directory
+app.config['UPLOAD_DIR'] = 'uploads/'                                     # Upload directory
 app.secret_key = '1RK+3588rZaM081C/c6fhTIvNOzb1L9K9nP0ojX3O7b7wJjAz5/I7EICH3m+/530/sW7iotaUK4R'
 
 
@@ -58,8 +58,18 @@ def main():
             flash(u'No file uploaded !', 'error')
 
 
+    # List if images in the upload folder
+    images = [ img for img in os.listdir(app.config['UPLOAD_DIR']) if 
+        check_filetype(
+            os.path.join(app.config['UPLOAD_DIR'], img), 
+            os.path.join(app.config['UPLOAD_DIR'], img)
+        )
+    ]
+
     # Display the index for GET or POST requests
-    return render_template('index.html')
+    return render_template('index.html', 
+        upload_dir=app.config['UPLOAD_DIR'], 
+        images=images)
 
 
 
@@ -72,7 +82,9 @@ def uploaded_file(filename):
 # and the type is truly an image, and not a random file 
 # with an image extension
 def check_filetype(file, filename):
-    return  filename.rsplit('.')[-1].lower() in     \
+    print(file)
+    print(filename)
+    return filename.rsplit('.')[-1].lower() in      \
         app.config['ALLOWED_EXTENSIONS'] and        \
         imghdr.what(file)
 

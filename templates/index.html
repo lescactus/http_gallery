@@ -28,5 +28,15 @@
         </div>
         {% endif %}
         {% endwith %}
+
+        {% if images %}
+            <ul class="images">
+            {% for img in images %}
+                <li>{{ img }}</li>
+                <img src="{{ upload_dir }}{{ img }}" alt="{{ img }}" style="width:304px;height:228px;">
+            {% endfor %}
+            </ul>
+        {% endif %}
+
     </body>
 </html>
