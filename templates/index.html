@@ -33,7 +33,9 @@
             <ul class="images">
             {% for img in images %}
                 <li>{{ img }}</li>
-                <img src="{{ upload_dir }}{{ img }}" alt="{{ img }}" style="width:304px;height:228px;">
+                <a href="{{ url_for('uploaded_file', filename=img) }}" >
+                    <img src="{{ upload_dir }}{{ img }}" alt="{{ img }}" style="width:304px;height:228px;">
+                </a>
             {% endfor %}
             </ul>
         {% endif %}
