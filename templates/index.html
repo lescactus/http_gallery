@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-    </head>
+    {% include "head.html" %}
     
     <body>
         <form action="" method="post" enctype="multipart/form-data">
@@ -29,14 +28,31 @@
         {% endif %}
         {% endwith %}
 
-        {% if images %}
+        {#
+            {% if images %}
+
             <ul class="images">
             {% for img in images %}
                 <li>{{ img }}</li>
                 <img src="{{ upload_dir }}{{ img }}" alt="{{ img }}" style="width:304px;height:228px;">
             {% endfor %}
             </ul>
+            {% endif %}
+        #}
+
+        {% if images %}
+        <div class="container-fluid" style="max-width: 90%;">
+        <section class="row">
+            {% for img in images %}
+            <div class="col-xs-6 col-sm-3 col-md-3 test">
+                <img src="{{ upload_dir }}{{ img }}" alt="{{ img }}" style="width:304px;height:228px;">
+            </div>
+            {% endfor %}
+        </section>
+        </div>
         {% endif %}
+
+
 
     </body>
 </html>
