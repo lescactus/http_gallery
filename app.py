@@ -29,34 +29,38 @@ app.secret_key = '1RK+3588rZaM081C/c6fhTIvNOzb1L9K9nP0ojX3O7b7wJjAz5/I7EICH3m+/5
 @app.route("/index/", methods=['GET', 'POST'])
 @app.route("/", methods=['GET', 'POST'])
 def main():
-    if request.method == 'GET':
-        return render_template('index.html')
-    elif request.method == 'POST':
+    #if request.method == 'GET':
+    #    return render_template('index.html')
+    if request.method == 'POST':
         
         # If file is uploaded
         if request.files['file'] and request.files['file'].filename:
 
             # If the extension of the file is allowed
-            if check_filetype(request.files['file'], request.files['file'].filename):
+            if check_filetype(request.files['file'], 
+                request.files['file'].filename):
                 
                 filename = secure_filename(request.files['file'].filename)
 
                 # Save the file in app.config['UPLOAD_DIR']
-                request.files['file'].save(os.path.join(app.config['UPLOAD_DIR'], filename))
-                return "OK"
-                # TODO: flash()
-                # #return redirect(request.url)
+                request.files['file'].save(
+                    os.path.join(
+                        app.config['UPLOAD_DIR'], 
+                        filename))
+
+                flash(u'OK', 'status_ok')
+                return redirect(request.url)
                 
             else:
-                return "File extension not allowed"
-                # TODO: flash()
-                #return redirect(request.url)
+                flash(u'File extension not allowed !', 'error')
 
         else:
             flash(u'No file uploaded !', 'error')
-            return "No file uploaded"
-            # TODO: flash()
-            #return redirect(request.url)
+
+
+    # Display the index for GET or POST requests
+    return render_template('index.html')
+
 
 
 @app.route('/uploads/<filename>')
@@ -68,7 +72,9 @@ def uploaded_file(filename):
 # and the type is truly an image, and not a random file 
 # with an image extension
 def check_filetype(file, filename):
-    return  filename.rsplit('.')[-1].lower() in app.config['ALLOWED_EXTENSIONS'] and  imghdr.what(file)
+    return  filename.rsplit('.')[-1].lower() in     \
+        app.config['ALLOWED_EXTENSIONS'] and        \
+        imghdr.what(file)
 
 
 

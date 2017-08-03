@@ -8,5 +8,25 @@
             <input type="file" name="file" />
             <input type="submit" value="Upload" />
         </form>
+
+        {% with errors = get_flashed_messages(category_filter=["error"]) %}
+        {% if errors %}
+        <div class="error">
+            {% for msg in errors %}
+            <p>{{ msg }}</p>
+            {% endfor -%}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% with status_ok = get_flashed_messages(category_filter=["status_ok"]) %}
+        {% if status_ok %}
+        <div class="status_ok">
+            {% for msg in status_ok %}
+            <p>{{ msg }}</p>
+            {% endfor -%}
+        </div>
+        {% endif %}
+        {% endwith %}
     </body>
 </html>
