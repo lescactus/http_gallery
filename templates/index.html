@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    </head>
+    
+    <body>
+        <form action="" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" />
+            <input type="submit" value="Upload" />
+        </form>
+
+        {% with errors = get_flashed_messages(category_filter=["error"]) %}
+        {% if errors %}
+        <div class="error">
+            {% for msg in errors %}
+            <p>{{ msg }}</p>
+            {% endfor -%}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% with status_ok = get_flashed_messages(category_filter=["status_ok"]) %}
+        {% if status_ok %}
+        <div class="status_ok">
+            {% for msg in status_ok %}
+            <p>{{ msg }}</p>
+            {% endfor -%}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% if images %}
+            <ul class="images">
+            {% for img in images %}
+                <li>{{ img }}</li>
+                <img src="{{ upload_dir }}{{ img }}" alt="{{ img }}" style="width:304px;height:228px;">
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+    </body>
+</html>
