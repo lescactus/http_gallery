@@ -35,10 +35,9 @@ def main():
         
         # If file is uploaded
         if request.files['file'] and request.files['file'].filename:
-
+            
             # If the extension of the file is allowed
-            if check_filetype(request.files['file'], 
-                request.files['file'].filename):
+            if check_filetype(request.files['file']):
                 
                 filename = secure_filename(request.files['file'].filename)
 
@@ -57,12 +56,14 @@ def main():
         else:
             flash(u'No file uploaded !', 'error')
 
-
     # List if images in the upload folder
-    images = [ img for img in os.listdir(app.config['UPLOAD_DIR']) if 
-        check_filetype(
-            os.path.join(app.config['UPLOAD_DIR'], img), 
-            os.path.join(app.config['UPLOAD_DIR'], img)
+    images = [ img for img in os.listdir(app.config['UPLOAD_DIR']) 
+        if (
+            check_filetype(
+                os.path.join(app.config['UPLOAD_DIR'], img)
+            ) and 
+            img.rsplit('.')[-1].lower() 
+                in app.config['ALLOWED_EXTENSIONS']
         )
     ]
 
@@ -79,15 +80,11 @@ def uploaded_file(filename):
                                filename)
 
 
-# Return true if the extension of filename is allowed
-# and the type is truly an image, and not a random file 
-# with an image extension
-def check_filetype(file, filename):
-    return filename.rsplit('.')[-1].lower() in      \
-        app.config['ALLOWED_EXTENSIONS'] and        \
-        imghdr.what(file)
-
-
+# Return true if the type is truly an image, 
+# and not a random file # with an image 
+# extension
+def check_filetype(file):
+    return imghdr.what(file) in app.config['ALLOWED_EXTENSIONS']
 
 
 
