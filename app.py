@@ -36,8 +36,12 @@ def main():
         # If file is uploaded
         if request.files['file'] and request.files['file'].filename:
             
-            # If the extension of the file is allowed
-            if check_filetype(request.files['file']):
+            # If the extension and type of the file is allowed
+            if ( 
+                    check_filetype(request.files['file']) 
+                and 
+                    os.path.splitext(request.files['file'].filename)[-1].lower() 
+            ):
                 
                 filename = secure_filename(request.files['file'].filename)
 
@@ -45,24 +49,28 @@ def main():
                 request.files['file'].save(
                     os.path.join(
                         app.config['UPLOAD_DIR'], 
-                        filename))
+                        filename)
+                )
 
                 flash(u'OK', 'status_ok')
                 return redirect(request.url)
                 
             else:
-                flash(u'File extension not allowed !', 'error')
+                flash(u'File extension or type not allowed !', 'error')
 
         else:
             flash(u'No file uploaded !', 'error')
 
     # List if images in the upload folder
     images = [ img for img in os.listdir(app.config['UPLOAD_DIR']) 
-        if (
-            check_filetype(
+        if 
+        (
+            check_filetype
+            (
                 os.path.join(app.config['UPLOAD_DIR'], img)
-            ) and 
-            img.rsplit('.')[-1].lower() 
+            ) 
+            and 
+            img.rsplit('.')[-1].lower()
                 in app.config['ALLOWED_EXTENSIONS']
         )
     ]
