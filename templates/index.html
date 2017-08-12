@@ -3,8 +3,14 @@
     {% include "head.html" %}
     
     <body>
-        <form action="" method="post" enctype="multipart/form-data">
+        <!--<form action="" method="post" enctype="multipart/form-data">
             <input type="file" name="file" />
+            <input type="submit" value="Upload" />
+        </form>-->
+        <form action="" method="post" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            {{ form.image }}
+            <!--<input type="file" name="form" />-->
             <input type="submit" value="Upload" />
         </form>
 
@@ -28,9 +34,15 @@
         {% endif %}
         {% endwith %}
 
-        {#
-            {% if images %}
+        {% if form.errors %}
+            <div class="status_ko">
+                {% for type,error in form.errors.items() %}
+                    <p>{{ error|join('') }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
 
+        {% if images %}
             <ul class="images">
             {% for img in images %}
                 <li>{{ img }}</li>
