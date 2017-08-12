@@ -52,7 +52,6 @@ def validate_file(alwd_ext):
             raise ValidationError(message)
             return _validate_file
         
-        
     return _validate_file
 
 
@@ -138,11 +137,11 @@ def check_filetype(file):
 # Add an incremental counter before the '.extension'
 # Ex: filename-001.png, filename-002.png, ...
 def increment_filename(filename, images):
-    basename = filename.rsplit('.')[-2]
+    basename = filename.rsplit('.')[-2] + "-"
     extension = "." + filename.rsplit('.')[-1]
     i = 1
     while filename in images:
-        filename = basename + "-" + str("{0:0=3d}".format(i)) + extension
+        filename = basename + str("{0:0=3d}".format(i)) + extension
         i = i + 1
 
     return filename
