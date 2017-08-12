@@ -37,28 +37,14 @@
             </div>
         {% endif %}
 
-        {% if images %}
-            <ul class="images">
-            {% for img in images %}
-                <li>{{ img }}</li>
-                <a href="{{ url_for('uploaded_file', filename=img) }}" >
-                    <img src="{{ upload_dir }}{{ img }}" alt="{{ img }}" style="width:304px;height:228px;">
+        {% if dictionnary %}
+            {% for img, thumb in dictionnary.items() %}
+            <div class="col-xs-6 col-sm-3">
+                <a href="{{ url_for('upload_file', filename=img) }}" class="thumbnail" >
+                    <img src="{{ url_for('thumbn_file', filename=thumb) }}" alt="{{ thumb }}" class="test">
                 </a>
-            {% endfor %}
-            </ul>
-            {% endif %}
-        #}
-
-        {% if images %}
-        <div class="container-fluid" style="max-width: 90%;">
-        <section class="row">
-            {% for img in images %}
-            <div class="col-xs-6 col-sm-3 col-md-3 test">
-                <img src="{{ upload_dir }}{{ img }}" alt="{{ img }}" style="width:304px;height:228px;">
             </div>
             {% endfor %}
-        </section>
-        </div>
         {% endif %}
 
 
