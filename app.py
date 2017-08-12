@@ -31,7 +31,9 @@ app.secret_key = '1RK+3588rZaM081C/c6fhTIvNOzb1L9K9nP0ojX3O7b7wJjAz5/I7EICH3m+/5
 
 
 
-
+# Custom validator
+# Check that the file is a real image,
+# Check that the file has a valid image extension
 def validate_file(alwd_ext):
 
     def _validate_file(form, field):
@@ -69,6 +71,17 @@ class ImageForm(FlaskForm):
 @app.route("/", methods=['GET', 'POST'])
 def main():
 
+    # List if images in the upload folder
+    images = [ img for img in os.listdir(app.config['UPLOAD_DIR']) 
+        if 
+        (
+            check_filetype(os.path.join(app.config['UPLOAD_DIR'], 
+                img)) 
+            and img.rsplit('.')[-1].lower() 
+                in app.config['ALLOWED_EXTENSIONS']
+        )
+    ]
+
     form = ImageForm()
     if request.method == 'POST':
 
@@ -77,6 +90,12 @@ def main():
             f = form.image.data
             filename = secure_filename(f.filename)
 
+            # If an image with the same name is already uploaded,
+            # add an incremental counter before the '.extension'
+            # Ex: filename-001.png, filename-002.png, ...
+            if filename in images:
+                filename = increment_filename(filename, images)
+                    
             print("f: " + str(f))
             print("filename: " + str(filename))
             print("save path: " + os.path.join(app.config['UPLOAD_DIR'],  filename))
@@ -89,16 +108,6 @@ def main():
             flash(u'File successfully uploaded', 'status_ok')
             return redirect(request.url)
 
-    # List if images in the upload folder
-    images = [ img for img in os.listdir(app.config['UPLOAD_DIR']) 
-        if 
-        (
-            check_filetype(os.path.join(app.config['UPLOAD_DIR'], 
-                img)) 
-            and img.rsplit('.')[-1].lower() 
-                in app.config['ALLOWED_EXTENSIONS']
-        )
-    ]
 
     # Display the index for GET or POST requests
     return render_template('index.html', 
@@ -119,13 +128,21 @@ if __name__ == "__main__":
 
 
 
-# Raise a ValidationError if the image is not
-# a real image. Ex: random file with image extension
-def check_filetype(alwd_ext):
-    message = "File must be an image !"
+# Return true if the type is truly an image,  
+# and not a random file with an image  
+# extension 
+def check_filetype(file): 
+    return imghdr.what(file) in app.config['ALLOWED_EXTENSIONS'] 
 
-    def _check_filetype(form, field):    
-        if not imghdr.what(field.data) in alwd_ext:
-            raise ValidationError(message)
-  
-    return _check_filetype
+
+# Add an incremental counter before the '.extension'
+# Ex: filename-001.png, filename-002.png, ...
+def increment_filename(filename, images):
+    basename = filename.rsplit('.')[-2]
+    extension = "." + filename.rsplit('.')[-1]
+    i = 1
+    while filename in images:
+        filename = basename + "-" + str("{0:0=3d}".format(i)) + extension
+        i = i + 1
+
+    return filename
