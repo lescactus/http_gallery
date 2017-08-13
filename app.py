@@ -83,17 +83,11 @@ def main():
         )
     ]
 
-    thumbnails = [ img for img in os.listdir(app.config['THUMBN_DIR']) 
-        if 
-        (
-            check_filetype(os.path.join(app.config['THUMBN_DIR'], 
-                img)) 
-            and img.rsplit('.')[-1].lower() 
-                in app.config['ALLOWED_EXTENSIONS']
-        )
-    ]
-    print(images)
-    print(thumbnails)
+    # Create a second list, same as 'images' but with the thumbnail name
+    # Ex: ['a-thumb.jpg', 'b-thumb.jpg', ...]
+    thumbnails = [add_thumb(item) for item in images]
+
+    # Create a bounded dictionnary from images and thumbnails
     dictionnary = dict(zip(images, thumbnails))
 
     form = ImageForm()
@@ -123,14 +117,13 @@ def main():
             # Create the thumbnail from uploaded image and save it to thumbnails folder
             create_thumbnail(str(filename))
 
-
+            # Inform user the file is uploaded
             flash(u'File successfully uploaded', 'success')
             return redirect(request.url)
 
 
     # Display the index for GET or POST requests
-    return render_template('index.html', 
-        upload_dir=app.config['UPLOAD_DIR'], 
+    return render_template('index.html',
         dictionnary=dictionnary,
         form=form)
 
@@ -170,13 +163,24 @@ def increment_filename(filename, images):
     return filename
 
 
-# Create and save a thumbnail of an image
-def create_thumbnail(filename):
+# Add '-thumb' to a filename juste before the .extension
+# Ex: a.jpg --> a-thumb.jpg
+def add_thumb(filename):
     basename = '.'.join(filename.rsplit('.')[:-1]) + "-thumb"
     extension = "." + filename.rsplit('.')[-1]
-    thumbnail = app.config['THUMBN_DIR'] + basename + extension
+    return basename + extension
+
+
+# Create and save a thumbnail of an image
+def create_thumbnail(filename):
+    #basename = '.'.join(filename.rsplit('.')[:-1]) + "-thumb"
+    #extension = "." + filename.rsplit('.')[-1]
+    #thumbnail = app.config['THUMBN_DIR'] + basename + extension
+    thumbnail = app.config['THUMBN_DIR'] + add_thumb(filename)
 
     with open(app.config['UPLOAD_DIR'] + filename, 'rb') as f:
         img = Image.open(f)
         img = resizeimage.resize_cover(img, app.config['THUMBN_SIZE'])
         img.save(thumbnail, img.format)
+
+
