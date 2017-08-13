@@ -124,7 +124,7 @@ def main():
             create_thumbnail(str(filename))
 
 
-            flash(u'File successfully uploaded', 'status_ok')
+            flash(u'File successfully uploaded', 'success')
             return redirect(request.url)
 
 
@@ -146,11 +146,8 @@ def thumbn_file(filename):
     return send_from_directory("thumbnails/",
                                filename)
 
-
-
 if __name__ == "__main__":
     app.run()
-
 
 
 # Return true if the type is truly an image,  

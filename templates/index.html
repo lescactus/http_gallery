@@ -1,52 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-    </head>
+    {% include "head.html" %}
     
     <body>
-        <form action="" method="post" enctype="multipart/form-data">
-            {{ form.csrf_token }}
-            {{ form.image }}
-            <input type="submit" value="Upload" />
-        </form>
-
-        {% with errors = get_flashed_messages(category_filter=["error"]) %}
-        {% if errors %}
-        <div class="error">
-            {% for msg in errors %}
-            <p>{{ msg }}</p>
-            {% endfor -%}
-        </div>
-        {% endif %}
-        {% endwith %}
-
-        {% with status_ok = get_flashed_messages(category_filter=["status_ok"]) %}
-        {% if status_ok %}
-        <div class="status_ok">
-            {% for msg in status_ok %}
-            <p>{{ msg }}</p>
-            {% endfor -%}
-        </div>
-        {% endif %}
-        {% endwith %}
-
-        {% if form.errors %}
-            <div class="status_ko">
-                {% for type,error in form.errors.items() %}
-                    <p>{{ error|join('') }}</p>
+        {% include "navbar.html" %}
+        <div class="container">
+            {% include "jumbotron.html" %}
+            {% include "form.html" %}
+            {% include "flash.html" %}
+            
+            <div class="row">
+                {% for img, thumb in dictionnary.items() %}
+                    <div class="col-xs-6 col-sm-3">
+                        <a href="{{ url_for('upload_file', filename=img) }}" class="thumbnail" >
+                            <img src="{{ url_for('thumbn_file', filename=thumb) }}" alt="{{ thumb }}" class="test">
+                        </a>
+                    </div>
                 {% endfor %}
             </div>
-        {% endif %}
-
-        {% if dictionnary %}
-            {% for img, thumb in dictionnary.items() %}
-            <div class="col-xs-6 col-sm-3">
-                <a href="{{ url_for('upload_file', filename=img) }}" class="thumbnail" >
-                    <img src="{{ url_for('thumbn_file', filename=thumb) }}" alt="{{ thumb }}" class="test">
-                </a>
-            </div>
-            {% endfor %}
-        {% endif %}
-
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="{{ url_for('static', filename='js/fileinput.min.js') }}" ></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}" ></script>
+        <script src="{{ url_for('static', filename='js/bootstrap-gallery.js') }}" ></script>
+        <script>
+            // bootstrap-fileinput.js
+            // initialize form (id='image') with defaults
+            $("#image").fileinput();
+        </script>
     </body>
 </html>
