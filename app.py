@@ -124,7 +124,7 @@ def main():
             create_thumbnail(str(filename))
 
 
-            flash(u'File successfully uploaded', 'status_ok')
+            flash(u'File successfully uploaded', 'success')
             return redirect(request.url)
 
 
@@ -148,16 +148,6 @@ def thumbn_file(filename):
 
 if __name__ == "__main__":
     app.run()
-
-
-if __name__ == "__main__":
-    app.run()
-
-# Return true if the type is truly an image,  
-# and not a random file with an image  
-# extension 
-def check_filetype(file): 
-    return imghdr.what(file) in app.config['ALLOWED_EXTENSIONS'] 
 
 
 # Return true if the type is truly an image,  

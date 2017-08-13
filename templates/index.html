@@ -3,8 +3,8 @@
     {% include "head.html" %}
     
     <body>
+        {% include "navbar.html" %}
         <div class="container">
-            {% include "title.html" %}
             {% include "form.html" %}
             
             <div class="row">
@@ -17,14 +17,10 @@
                 {% endfor %}
             </div>
         </div>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+        <script src="{{ url_for('static', filename='js/fileinput.min.js') }}" ></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="{{ url_for('static', filename='js/bootstrap-gallery.js') }}" ></script>
-        
-        <script>
-        $(document).ready(function() {
-            $('a.custom-selector').bootstrapGallery();
-        });
-        </script>
     </body>
 </html>

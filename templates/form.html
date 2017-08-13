@@ -14,10 +14,10 @@
 {% endif %}
 {% endwith %}
 
-{% with status_ok = get_flashed_messages(category_filter=["status_ok"]) %}
-{% if status_ok %}
-<div class="status_ok">
-    {% for msg in status_ok %}
+{% with success = get_flashed_messages(category_filter=["success"]) %}
+{% if success %}
+<div class="success">
+    {% for msg in success %}
     <p>{{ msg }}</p>
     {% endfor -%}
 </div>
@@ -25,7 +25,7 @@
 {% endwith %}
 
 {% if form.errors %}
-    <div class="status_ko">
+    <div class="error">
         {% for type,error in form.errors.items() %}
             <p>{{ error|join('') }}</p>
         {% endfor %}
