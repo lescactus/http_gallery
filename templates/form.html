@@ -1,33 +1,7 @@
-<form action="" method="post" enctype="multipart/form-data">
-    {{ form.csrf_token }}
-    {{ form.image }}
-    <input type="submit" value="Upload" class="btn-default" />
-</form>
-
-{% with errors = get_flashed_messages(category_filter=["error"]) %}
-{% if errors %}
-<div class="error">
-    {% for msg in errors %}
-    <p>{{ msg }}</p>
-    {% endfor -%}
+<div class="row">
+    <form action="" method="post" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        {{ form.image }}
+        <input type="submit" value="Upload" class="btn-default" />
+    </form>
 </div>
-{% endif %}
-{% endwith %}
-
-{% with success = get_flashed_messages(category_filter=["success"]) %}
-{% if success %}
-<div class="success">
-    {% for msg in success %}
-    <p>{{ msg }}</p>
-    {% endfor -%}
-</div>
-{% endif %}
-{% endwith %}
-
-{% if form.errors %}
-    <div class="error">
-        {% for type,error in form.errors.items() %}
-            <p>{{ error|join('') }}</p>
-        {% endfor %}
-    </div>
-{% endif %}
