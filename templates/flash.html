@@ -1,7 +1,7 @@
 <div class="row">  
     {% with errors = get_flashed_messages(category_filter=["error"]) %}
     {% if errors %}
-    <div class="error">
+    <div class="alert alert-danger">
         {% for msg in errors %}
         <p>{{ msg }}</p>
         {% endfor -%}
@@ -11,7 +11,7 @@
 
     {% with success = get_flashed_messages(category_filter=["success"]) %}
     {% if success %}
-    <div class="success">
+    <div class="alert alert-success">
         {% for msg in success %}
         <p>{{ msg }}</p>
         {% endfor -%}
@@ -20,7 +20,7 @@
     {% endwith %}
 
     {% if form.errors %}
-        <div class="error">
+        <div class="alert alert-danger">
             {% for type,error in form.errors.items() %}
                 <p>{{ error|join('') }}</p>
             {% endfor %}
