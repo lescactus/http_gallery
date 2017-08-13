@@ -7,7 +7,22 @@
     <title>Upload your images</title>
     <link href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet" type="text/css" />
     <!-- <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" /> -->
-    <link href="{{ url_for('static', filename='css/flatty.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- <link href="{{ url_for('static', filename='css/flatty.min.css') }}" rel="stylesheet" type="text/css" /> -->
+    {% if theme %}
+        {% if theme == "flatty" %}
+            <link href="{{ url_for('static', filename='css/flatty.min.css') }}" rel="stylesheet" type="text/css" />
+        {% elif theme == "solar" %}
+            <link href="{{ url_for('static', filename='css/solar.min.css') }}" rel="stylesheet" type="text/css" />
+        {% elif theme == "darkly" %}
+            <link href="{{ url_for('static', filename='css/darkly.min.css') }}" rel="stylesheet" type="text/css" />
+        {% elif theme == "superhero" %}
+            <link href="{{ url_for('static', filename='css/superhero.min.css') }}" rel="stylesheet" type="text/css" />
+        {% endif %}
+    {% else %} {# Default theme if no cookie set #}
+        <link href="{{ url_for('static', filename='css/flatty.min.css') }}" rel="stylesheet" type="text/css" />
+    {% endif %}
+
+    
     <link href="{{ url_for('static', filename='css/fileinput.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url_for('static', filename='css/bootstrap-gallery.css') }}" rel="stylesheet" type="text/css" />
 </head>

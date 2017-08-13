@@ -28,5 +28,26 @@
             // initialize form (id='image') with defaults
             $("#image").fileinput();
         </script>
+        <script>
+            $('#theme1').click(function(){
+                document.cookie = "theme=flatty";
+                location.reload(); 
+             });
+
+            $('#theme2').click(function(){
+                document.cookie = "theme=solar";
+                location.reload(); 
+            });
+
+            $('#theme3').click(function(){
+                document.cookie = "theme=darkly";
+                location.reload(); 
+            });
+
+            $('#theme4').click(function(){
+                document.cookie = "theme=superhero";
+                location.reload(); 
+            });
+        </script>
     </body>
 </html>

@@ -55,7 +55,7 @@ def validate_file(alwd_ext):
             message = "File must have a valid image extension !"
             raise ValidationError(message)
             return _validate_file
-        
+
     return _validate_file
 
 
@@ -90,7 +90,10 @@ def main():
     # Create a bounded dictionnary from images and thumbnails
     dictionnary = dict(zip(images, thumbnails))
 
+    # Initialize ImageForm()
     form = ImageForm()
+
+
     if request.method == 'POST':
 
         # Form is submitted
@@ -122,10 +125,31 @@ def main():
             return redirect(request.url)
 
 
-    # Display the index for GET or POST requests
-    return render_template('index.html',
+
+    # If a cookie is set with the name "theme",
+    # get this cookie
+    if request.cookies.get("theme"):
+        theme = request.cookies.get("theme")
+    else:
+        # Default is 'flatty'  
+        theme = "flatty"
+
+    response = make_response(render_template('index.html',
         dictionnary=dictionnary,
-        form=form)
+        form=form,
+        theme=theme))
+
+
+    response.set_cookie('theme', theme)
+
+
+
+    return response
+
+    # Display the index for GET or POST requests
+    #return render_template('index.html',
+    #    dictionnary=dictionnary,
+    #    form=form)
 
 
 
