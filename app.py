@@ -134,23 +134,18 @@ def main():
         # Default is 'flatty'  
         theme = "flatty"
 
+    # Prepare response
     response = make_response(render_template('index.html',
         dictionnary=dictionnary,
         form=form,
         theme=theme))
-
-
+    
+    # Set the 'theme' cookie
     response.set_cookie('theme', theme)
 
 
-
-    return response
-
     # Display the index for GET or POST requests
-    #return render_template('index.html',
-    #    dictionnary=dictionnary,
-    #    form=form)
-
+    return response
 
 
 @app.route('/uploads/<filename>')
@@ -197,9 +192,6 @@ def add_thumb(filename):
 
 # Create and save a thumbnail of an image
 def create_thumbnail(filename):
-    #basename = '.'.join(filename.rsplit('.')[:-1]) + "-thumb"
-    #extension = "." + filename.rsplit('.')[-1]
-    #thumbnail = app.config['THUMBN_DIR'] + basename + extension
     thumbnail = app.config['THUMBN_DIR'] + add_thumb(filename)
 
     with open(app.config['UPLOAD_DIR'] + filename, 'rb') as f:

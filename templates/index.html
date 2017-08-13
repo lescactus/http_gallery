@@ -29,24 +29,34 @@
             $("#image").fileinput();
         </script>
         <script>
-            $('#theme1').click(function(){
-                document.cookie = "theme=flatty";
-                location.reload(); 
-             });
+            //
+            // Get the clicked theme, and save it in a cookie
+            //
 
-            $('#theme2').click(function(){
-                document.cookie = "theme=solar";
-                location.reload(); 
-            });
+            $("[id^=theme]").click(function(selector, options){
+                var theme = "";
 
-            $('#theme3').click(function(){
-                document.cookie = "theme=darkly";
-                location.reload(); 
-            });
+                switch(this.id) {
+                    case "theme1":
+                        theme = "flatty";
+                        break;
+                    case "theme2":
+                        theme = "solar";
+                        break;
+                    case "theme3":
+                        theme = "darkly";
+                        break;
+                    case "theme4":
+                        theme = "superhero";
+                        break;
 
-            $('#theme4').click(function(){
-                document.cookie = "theme=superhero";
-                location.reload(); 
+                    // Should never go here
+                    default:
+                        theme = "flatty";
+                } 
+
+                document.cookie = "theme=" + theme;
+                location.reload();
             });
         </script>
     </body>
