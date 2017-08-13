@@ -5,10 +5,10 @@ LABEL "Maintainer"="Alexandre Maldémé" \
 
 
 # Add the app in /opt
-ADD . /opt
+ADD . /var/www
 
 # Working directory for "CMD"
-WORKDIR /opt
+WORKDIR /var/www
 
 # Set Flask env variables
 ENV FLASK_APP=app.py \
@@ -20,7 +20,7 @@ EXPOSE 5000
 # Install Flask via pip,
 # Change ownership of app to www-data
 RUN pip install -r requirements.txt && \
-    chown -R www-data: /opt
+    chown -R www-data: /var/www
 
 # "CMD" will be executed as www-data
 USER www-data
