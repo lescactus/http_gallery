@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+  front:
+    build:
+      context: ./nginx/
+      dockerfile: Dockerfile
+    container_name: app-front
+    depends_on:
+      - back
+    restart: always
+    ports:
+     - "80:80"
+    links:
+     - back:back
+
+  back:
+    build:
+      context: ./app/
+      dockerfile: Dockerfile
+    container_name: app-back
+    restart: always
+    expose:
+     - 5000
