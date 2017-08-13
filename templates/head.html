@@ -5,15 +5,24 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     
     <title>Upload your images</title>
-    <!--<link href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
-    <!--<link href="{{ url_for('static', filename='css/flatty.min.css') }}" rel="stylesheet" type="text/css" />-->
-    
+    <link href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet" type="text/css" />
+    <!-- <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" /> -->
+    <!-- <link href="{{ url_for('static', filename='css/flatty.min.css') }}" rel="stylesheet" type="text/css" /> -->
+    {% if theme %}
+        {% if theme == "flatty" %}
+            <link href="{{ url_for('static', filename='css/flatty.min.css') }}" rel="stylesheet" type="text/css" />
+        {% elif theme == "solar" %}
+            <link href="{{ url_for('static', filename='css/solar.min.css') }}" rel="stylesheet" type="text/css" />
+        {% elif theme == "darkly" %}
+            <link href="{{ url_for('static', filename='css/darkly.min.css') }}" rel="stylesheet" type="text/css" />
+        {% elif theme == "superhero" %}
+            <link href="{{ url_for('static', filename='css/superhero.min.css') }}" rel="stylesheet" type="text/css" />
+        {% endif %}
+    {% else %} {# Default theme if no cookie set #}
+        <link href="{{ url_for('static', filename='css/flatty.min.css') }}" rel="stylesheet" type="text/css" />
+    {% endif %}
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    
+    <link href="{{ url_for('static', filename='css/fileinput.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/bootstrap-gallery.css') }}" rel="stylesheet" type="text/css" />
 </head>

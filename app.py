@@ -11,13 +11,15 @@ from flask import make_response
 from flask import flash
 from flask import redirect
 from flask import send_from_directory
+from PIL import Image                           # Image()
+from resizeimage import resizeimage             # resize_width()
 from werkzeug import secure_filename            # secure_filemane()
 from flask_wtf import FlaskForm                 # FlaskForm
 from flask_wtf.file import FileField            # FileField()
 from flask_wtf.file import FileRequired         # FileRequired()
 from wtforms.validators import ValidationError  # ValidationError()
 import imghdr                                   # what()
-import os                                       # join()
+import os                                       # join(), listdir()
 
 
 app = Flask(__name__)
@@ -26,6 +28,8 @@ app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024                         # 16Mb max per upload
 app.config['ALLOWED_EXTENSIONS'] = ('bmp', 'gif', 'png', 'jpg', 'jpeg')     # Allowed file extensions to be uploaded
 app.config['UPLOAD_DIR'] = 'uploads/'                                       # Upload directory
+app.config['THUMBN_DIR'] = 'thumbnails/'                                    # Thumbnails directory
+app.config['THUMBN_SIZE'] = [300, 300]                                      # Thumbnails size in px
 app.secret_key = '1RK+3588rZaM081C/c6fhTIvNOzb1L9K9nP0ojX3O7b7wJjAz5/I7EICH3m+/530/sW7iotaUK4R'
 
 
@@ -51,7 +55,7 @@ def validate_file(alwd_ext):
             message = "File must have a valid image extension !"
             raise ValidationError(message)
             return _validate_file
-        
+
     return _validate_file
 
 
@@ -74,14 +78,22 @@ def main():
     images = [ img for img in os.listdir(app.config['UPLOAD_DIR']) 
         if 
         (
-            check_filetype(os.path.join(app.config['UPLOAD_DIR'], 
-                img)) 
-            and img.rsplit('.')[-1].lower() 
-                in app.config['ALLOWED_EXTENSIONS']
+            check_filetype(os.path.join(app.config['UPLOAD_DIR'], img)) and 
+            img.rsplit('.')[-1].lower() in app.config['ALLOWED_EXTENSIONS']
         )
     ]
 
+    # Create a second list, same as 'images' but with the thumbnail name
+    # Ex: ['a-thumb.jpg', 'b-thumb.jpg', ...]
+    thumbnails = [add_thumb(item) for item in images]
+
+    # Create a bounded dictionnary from images and thumbnails
+    dictionnary = dict(zip(images, thumbnails))
+
+    # Initialize ImageForm()
     form = ImageForm()
+
+
     if request.method == 'POST':
 
         # Form is submitted
@@ -99,32 +111,55 @@ def main():
             print("filename: " + str(filename))
             print("save path: " + os.path.join(app.config['UPLOAD_DIR'],  filename))
 
+            # Save image in upload folder
             f.save(os.path.join(
                 app.config['UPLOAD_DIR'], 
                 filename
             ))
 
-            flash(u'File successfully uploaded', 'status_ok')
+            # Create the thumbnail from uploaded image and save it to thumbnails folder
+            create_thumbnail(str(filename))
+
+            # Inform user the file is uploaded
+            flash(u'File successfully uploaded', 'success')
             return redirect(request.url)
 
 
-    # Display the index for GET or POST requests
-    return render_template('index.html', 
-        upload_dir=app.config['UPLOAD_DIR'], 
-        images=images,
-        form=form)
 
+    # If a cookie is set with the name "theme",
+    # get this cookie
+    if request.cookies.get("theme"):
+        theme = request.cookies.get("theme")
+    else:
+        # Default is 'flatty'  
+        theme = "flatty"
+
+    # Prepare response
+    response = make_response(render_template('index.html',
+        dictionnary=dictionnary,
+        form=form,
+        theme=theme))
+    
+    # Set the 'theme' cookie
+    response.set_cookie('theme', theme)
+
+
+    # Display the index for GET or POST requests
+    return response
 
 
 @app.route('/uploads/<filename>')
-def uploaded_file(filename):
+def upload_file(filename):
     return send_from_directory(app.config['UPLOAD_DIR'],
                                filename)
 
+@app.route('/thumbnails/<filename>')
+def thumbn_file(filename):
+    return send_from_directory("thumbnails/",
+                               filename)
 
 if __name__ == "__main__":
     app.run()
-
 
 
 # Return true if the type is truly an image,  
@@ -145,3 +180,23 @@ def increment_filename(filename, images):
         i = i + 1
 
     return filename
+
+
+# Add '-thumb' to a filename juste before the .extension
+# Ex: a.jpg --> a-thumb.jpg
+def add_thumb(filename):
+    basename = '.'.join(filename.rsplit('.')[:-1]) + "-thumb"
+    extension = "." + filename.rsplit('.')[-1]
+    return basename + extension
+
+
+# Create and save a thumbnail of an image
+def create_thumbnail(filename):
+    thumbnail = app.config['THUMBN_DIR'] + add_thumb(filename)
+
+    with open(app.config['UPLOAD_DIR'] + filename, 'rb') as f:
+        img = Image.open(f)
+        img = resizeimage.resize_cover(img, app.config['THUMBN_SIZE'])
+        img.save(thumbnail, img.format)
+
+
