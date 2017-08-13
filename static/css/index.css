@@ -26,3 +26,7 @@ body {
 .heart {
     color: #db8ea2;
 }
+
+.bckgnrd-color {
+    background-color: inherit !important;
+}
