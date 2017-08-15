@@ -133,10 +133,10 @@ $ docker-compose up -d
 This will map the port 80 of the host to the port 80 of Nginx's container. 
 
 
-###Docker volumes
-Since Docker is stateless, uploaded files are removed when the container is destroyed. You can make your data persistent by mounting the `uploads/` and `thumbnails/` folders in Docker volumes.
+### Docker volumes
+Since Docker is stateless, uploaded files are removed when the container is destroyed. You can make your data persistent by mounting the `uploads/` and `thumbnails/` folders in Docker volumes:
 ```sh
-# docker run \
+# docker run
 docker run -d \
 -p 80:5000 \
 -v $(pwd)/uploads:/var/www/uploads \
@@ -179,19 +179,19 @@ But be carefull with the folder permissions. Indeed, you must ensure to set owne
 
 Screenshots
 -----------
-####Index
+**Index**
 ![Index](https://i.imgur.com/DIMzgU6.png "Index")
 ***
-####Image upload form
+**Image upload form**
 ![Upload an image](https://i.imgur.com/RGCiG8l.png "Upload an image")
 ***
-####Gallery
+**Gallery**
 ![Gallery](https://i.imgur.com/eadFN3J.png "Gallery")
 ***
-####Carousel
+**Carousel**
 ![Carousel](https://i.imgur.com/WaMuiv9.png "Carousel")
 ***
-####Responsive gallery
+**Responsive gallery**
 ![Responsive](https://i.imgur.com/fGxH2CH.png "Responsive")
 ***
 
