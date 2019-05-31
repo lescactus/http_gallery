@@ -21,4 +21,4 @@ services:
     container_name: app-back
     restart: always
     expose:
-     - 5000
+     - 8080

@@ -1,29 +1,22 @@
-FROM python:3.5-jessie
+FROM registry.access.redhat.com/ubi7/python-36
 
 LABEL "Maintainer"="Alexandre Maldémé" \
         "version"="0.1"
 
-
-# Add the app in /opt
-ADD . /var/www
-
-# Working directory for "CMD"
-WORKDIR /var/www
+# Add the app
+ADD . .
 
 # Set Flask env variables
 ENV FLASK_APP=app.py \
-    FLASK_DEBUG=1
+    FLASK_DEBUG=0
 
-# By default Flask use port 5000
-EXPOSE 5000
+# Flask will use port 8080
+EXPOSE 8080
 
 # Install Flask via pip,
 # Change ownership of app to www-data
-RUN pip install -r requirements.txt && \
-    chown -R www-data: /var/www
-
-# "CMD" will be executed as www-data
-USER www-data
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
 # Run the app
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["flask", "run", "--host=0.0.0.0", "--port=8080"]
