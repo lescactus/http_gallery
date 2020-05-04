@@ -4,7 +4,7 @@ LABEL "Maintainer"="Alexandre Maldémé" \
         "version"="0.1"
 
 # Add the app
-ADD . .
+COPY --chown=1001:1001 . .
 
 # Set Flask env variables
 ENV FLASK_APP=app.py \
