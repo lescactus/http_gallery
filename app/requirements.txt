@@ -1,4 +1,4 @@
-flask
-Flask-WTF
-python-resize-image
+flask==1.1.4
+Flask-WTF==1.0.1
+python-resize-image==1.1.20
 werkzeug==0.16.0
