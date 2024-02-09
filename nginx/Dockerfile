@@ -9,6 +9,5 @@ ADD ./app.conf /etc/nginx/conf.d
 # By default Nginx use port 80
 EXPOSE 80
 
-
 # Run Nginx
 CMD ["nginx", "-g", "daemon off;"]

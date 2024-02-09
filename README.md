@@ -3,7 +3,7 @@ HTTP Gallery
 
 A Flask web app that allow users to upload local images that are displayed in a html gallery and carousel.
 
-**gallery**: [gallery.alexasr.tk][1]
+**gallery**: [gallery.alexasr.fr][1]
 
 It uses:
 

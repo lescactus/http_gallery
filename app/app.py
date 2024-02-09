@@ -13,7 +13,7 @@ from flask import redirect
 from flask import send_from_directory
 from PIL import Image                           # Image()
 from resizeimage import resizeimage             # resize_width()
-from werkzeug import secure_filename            # secure_filemane()
+from werkzeug.utils import secure_filename      # secure_filemane()
 from flask_wtf import FlaskForm                 # FlaskForm
 from flask_wtf.file import FileField            # FileField()
 from flask_wtf.file import FileRequired         # FileRequired()
